@@ -348,17 +348,22 @@ section[id],
 }
 
 .about {
-  grid-template-columns: var(--rail) minmax(390px, 42vw) minmax(0, 1fr);
-  min-height: clamp(660px, 92svh, 760px);
+  /* A narrower portrait leaves the text wide enough for four values in a row, which keeps the section short. */
+  grid-template-columns: var(--rail) minmax(340px, min(34vw, 620px)) minmax(0, 1fr);
+  min-height: clamp(600px, 80svh, 720px);
   background: var(--paper);
 }
 
 .about-art {
+  position: relative;
   min-height: 0;
   overflow: hidden;
 }
 
 .about-art img {
+  /* Out of flow, so the tall portrait cannot stretch the section: the text sets the height. */
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -372,7 +377,7 @@ section[id],
 
 .about-copy {
   align-self: center;
-  padding: clamp(34px, 4vw, 62px) clamp(42px, 5vw, 74px);
+  padding: clamp(28px, 3vw, 48px) clamp(36px, 4.4vw, 68px);
 }
 
 .eyebrow {
@@ -397,7 +402,7 @@ section[id],
 
 .about-copy h2 {
   max-width: 14em;
-  font-size: clamp(40px, 4vw, 56px);
+  font-size: clamp(34px, 3.4vw, 52px);
   line-height: 1.02;
   text-wrap: balance;
 }
@@ -473,6 +478,83 @@ section[id],
   .values article:nth-child(odd) {
     padding-left: 0;
     border-left: 0;
+  }
+}
+
+/* About entrance. The portrait is unveiled like a cloth drawn off a painting; the text builds in reading order; the value icons draw themselves.
+   Delays come from --d, set per element in script.js. */
+/* The clip sits on the image, not on the observed box: a fully clipped box never
+   counts as on screen, so it would never be revealed. */
+.about-art.reveal {
+  opacity: 1;
+  transform: none;
+}
+
+/* Unveiled from the top down: the top of the picture is what is on screen when it starts. */
+.about-art.reveal img {
+  clip-path: inset(0 0 100% 0);
+  transform: scale(1.14);
+  transition:
+    clip-path 1400ms var(--ease-out),
+    transform 1800ms var(--ease-out);
+}
+
+.about-art.reveal.is-visible img {
+  clip-path: inset(0);
+  transform: scale(1);
+}
+
+.about:hover .about-art.is-visible img {
+  transform: scale(1.018);
+}
+
+.about-copy.reveal {
+  opacity: 1;
+  transform: none;
+}
+
+.about-copy > .eyebrow,
+.about-copy h2 .word,
+.about-copy > p:not(.eyebrow),
+.values article,
+.skills li {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 620ms ease var(--d, 0ms),
+    transform 620ms var(--ease-out) var(--d, 0ms);
+}
+
+.about-copy h2 .word {
+  display: inline-block;
+}
+
+.about-copy.is-visible > .eyebrow,
+.about-copy.is-visible h2 .word,
+.about-copy.is-visible > p:not(.eyebrow),
+.about-copy.is-visible .values article,
+.about-copy.is-visible .skills li {
+  opacity: 1;
+  transform: none;
+}
+
+.value-icon path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 900ms var(--ease-out) calc(var(--d, 0ms) + 200ms);
+}
+
+.about-copy.is-visible .value-icon path {
+  stroke-dashoffset: 0;
+}
+
+.values article:hover .value-icon path {
+  animation: icon-draw 800ms var(--ease-out);
+}
+
+@keyframes icon-draw {
+  from {
+    stroke-dashoffset: 1;
   }
 }
 
@@ -835,15 +917,19 @@ section[id],
     filter 500ms ease;
 }
 
+/* The open card reads like a diploma: everything centred, institution on top,
+   the degree in serif, a short rule, then the detail and the years. */
 .work-card > div {
   position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  padding: clamp(28px, 3.2vw, 46px);
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 3vw, 44px);
   background: var(--seafoam-deep);
   color: var(--ink);
+  text-align: center;
   transform: translateY(101%);
   transition: transform 620ms var(--ease-out);
 }
@@ -862,22 +948,49 @@ section[id],
 }
 
 .work-card h2 {
-  font-size: clamp(23px, 2.2vw, 32px);
-  line-height: 1.05;
+  margin: 14px 0 0;
+  font-size: clamp(22px, 2.3vw, 34px);
+  line-height: 1.1;
+}
+
+.work-card h2 em {
+  font-style: italic;
+}
+
+.work-card h2::after {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 1px;
+  margin: 18px auto 0;
+  background: currentColor;
 }
 
 .work-card p {
-  max-width: 520px;
-  margin: 14px 0 0;
+  max-width: 30em;
+  margin: 16px 0 0;
   color: #3f4d49;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
 .work-card .meta {
+  margin: 0;
   color: #364340;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.work-card p + .meta {
+  margin-top: 12px;
+}
+
+.diploma-logo {
+  width: auto;
+  height: clamp(34px, 4vw, 52px);
+  margin-bottom: 16px;
 }
 
 .skills {
@@ -910,7 +1023,7 @@ section[id],
 .skills li {
   display: inline-flex;
   width: fit-content;
-  margin: 14px 6px 0 0;
+  margin: 8px 6px 0 0;
   padding: 5px 10px;
   border: 1px solid rgba(43, 43, 41, 0.18);
   border-radius: 999px;
@@ -927,7 +1040,8 @@ section[id],
   justify-items: center;
   overflow: hidden;
   padding-top: clamp(42px, 6vh, 64px);
-  background: var(--paper);
+  /* The clip's own background colour, so the picture has no visible edge. */
+  background: #f3edd9;
   text-align: center;
 }
 
@@ -990,16 +1104,19 @@ section[id],
 }
 
 .footer-people {
-  align-self: end;
+  /* A video ignores a percentage height in an auto-sized grid row, so it is stretched instead. */
+  align-self: stretch;
   justify-self: center;
   width: 100vw;
   max-width: none;
-  height: 100%;
+  height: auto;
   min-height: 420px;
   margin-top: 16px;
   object-fit: cover;
-  object-position: center 24%;
+  object-position: center top;
   pointer-events: none;
+  /* The clip's cream varies slightly across the frame; a short fade hides the difference. */
+  mask-image: linear-gradient(180deg, transparent, #000 28px);
 }
 
 /* Above the fold: plain CSS entrance, so the hero never depends on the scroll observer. */
@@ -1067,7 +1184,7 @@ section[id],
   }
 
   .about {
-    grid-template-columns: var(--rail) minmax(360px, 40vw) minmax(0, 1fr);
+    grid-template-columns: var(--rail) minmax(280px, 32vw) minmax(0, 1fr);
   }
 
   .about-copy {
@@ -1221,12 +1338,12 @@ section[id],
 
   .footer {
     min-height: 760px;
-    grid-template-rows: auto auto minmax(390px, 1fr);
+    grid-template-rows: auto minmax(390px, 1fr);
   }
 
   .footer-people {
     min-height: 390px;
-    object-position: center 28%;
+    object-position: center top;
   }
 }
 
@@ -1320,10 +1437,9 @@ section[id],
 
   .footer-people {
     width: 150vw;
-    height: 100%;
     min-height: 370px;
     object-fit: cover;
-    object-position: center 24%;
+    object-position: center top;
   }
 }
 

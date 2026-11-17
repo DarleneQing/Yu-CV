@@ -11,6 +11,29 @@ const updateHeader = () => {
 updateHeader();
 window.addEventListener("scroll", updateHeader, { passive: true });
 
+// About: split the heading into words and give each text piece its place in the build order.
+const aboutCopy = document.querySelector(".about-copy");
+if (aboutCopy && !prefersReducedMotion) {
+  const heading = aboutCopy.querySelector("h2");
+  const words = heading.textContent.trim().split(/\s+/);
+  heading.textContent = "";
+  words.forEach((word, index) => {
+    const span = document.createElement("span");
+    span.className = "word";
+    span.textContent = word;
+    heading.append(span, index < words.length - 1 ? " " : "");
+  });
+
+  const delay = (selector, start, step) =>
+    aboutCopy.querySelectorAll(selector).forEach((element, index) => {
+      element.style.setProperty("--d", `${start + index * step}ms`);
+    });
+  delay("h2 .word", 100, 45);
+  delay(":scope > p:not(.eyebrow)", 560, 0);
+  delay(".values article", 720, 90);
+  delay(".skills li", 1080, 24);
+}
+
 if (prefersReducedMotion) {
   revealItems.forEach((item) => item.classList.add("is-visible"));
 } else {
@@ -29,7 +52,21 @@ if (prefersReducedMotion) {
     { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
   );
 
-  revealItems.forEach((item) => revealObserver.observe(item));
+  // The portrait waits until a third of it is on screen, so its unveiling happens in view.
+  const portrait = document.querySelector(".about-art");
+  const portraitObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      portraitObserver.disconnect();
+    },
+    { threshold: 0.33 }
+  );
+
+  revealItems.forEach((item) => {
+    if (item === portrait) portraitObserver.observe(item);
+    else revealObserver.observe(item);
+  });
 }
 
 // Hero: the typing video loops at the top of the page. While the hero is pinned,
@@ -77,8 +114,15 @@ if (prefersReducedMotion) {
 // The ribbon is fixed, so it would sit on top of the footer: slide it away there.
 const ribbon = document.querySelector(".ribbon");
 const footer = document.querySelector(".footer");
+const footerVideo = document.querySelector(".footer-people");
 if (ribbon && footer) {
-  new IntersectionObserver(([entry]) => ribbon.classList.toggle("is-hidden", entry.isIntersecting)).observe(footer);
+  new IntersectionObserver(([entry]) => {
+    ribbon.classList.toggle("is-hidden", entry.isIntersecting);
+    // The footer loop only downloads and plays once it is on screen; reduced motion keeps the still.
+    if (!footerVideo || prefersReducedMotion) return;
+    if (entry.isIntersecting) footerVideo.play().catch(() => {});
+    else footerVideo.pause();
+  }).observe(footer);
 }
 
 educationCards.forEach((card) => {
