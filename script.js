@@ -74,6 +74,13 @@ if (prefersReducedMotion) {
   drawHeroFrame();
 }
 
+// The ribbon is fixed, so it would sit on top of the footer: slide it away there.
+const ribbon = document.querySelector(".ribbon");
+const footer = document.querySelector(".footer");
+if (ribbon && footer) {
+  new IntersectionObserver(([entry]) => ribbon.classList.toggle("is-hidden", entry.isIntersecting)).observe(footer);
+}
+
 educationCards.forEach((card) => {
   card.addEventListener("click", () => {
     const willOpen = !card.classList.contains("is-open");

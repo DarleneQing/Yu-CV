@@ -60,47 +60,39 @@ a {
   mix-blend-mode: multiply;
 }
 
-.ribbon,
-.footer-ribbon {
-  width: 47px;
-  height: 99px;
-  display: grid;
-  place-items: start center;
-  padding-top: 25px;
-  color: var(--paper);
-  background: #7fa7a3;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 84%, 0 100%);
-}
-
+/* Silk ribbon: a vertical sheen for the fabric, a short shadow at the top where it
+   folds over the page edge, and a swallowtail end. */
 .ribbon {
   position: fixed;
-  top: 0;
+  /* Starts above the viewport so the hover drop never shows a gap. */
+  top: -6px;
   left: 36px;
   z-index: 50;
+  width: 46px;
+  height: 138px;
+  display: grid;
+  place-items: start center;
+  padding-top: 56px;
+  color: #f4ecd8;
+  font-family: var(--display);
+  font-size: 18px;
+  font-style: italic;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.36) 6px, transparent 18px),
+    linear-gradient(90deg, #174a4f 0%, #2a767c 38%, #348589 52%, #236267 78%, #153f44 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 84%, 0 100%);
+  transition: transform 320ms var(--ease-out);
 }
 
-.ribbon span,
-.footer-ribbon span {
-  position: relative;
-  width: 17px;
-  height: 17px;
-  transform: rotate(45deg);
+.ribbon:hover,
+.ribbon:focus-visible {
+  transform: translateY(4px);
 }
 
-.ribbon span::before,
-.ribbon span::after,
-.footer-ribbon span::before,
-.footer-ribbon span::after {
-  content: "";
-  position: absolute;
-  inset: 8px 1px auto;
-  height: 1.5px;
-  background: currentColor;
-}
-
-.ribbon span::after,
-.footer-ribbon span::after {
-  transform: rotate(90deg);
+.ribbon.is-hidden {
+  transform: translateY(-100%);
 }
 
 .site-header {
@@ -151,8 +143,7 @@ a {
   white-space: nowrap;
 }
 
-.site-header nav a::after,
-.footer-links a::after {
+.site-header nav a::after {
   content: "";
   position: absolute;
   right: 0;
@@ -166,15 +157,9 @@ a {
 }
 
 .site-header nav a:hover::after,
-.site-header nav a:focus-visible::after,
-.footer-links a:hover::after,
-.footer-links a:focus-visible::after {
+.site-header nav a:focus-visible::after {
   transform: scaleX(1);
   transform-origin: left;
-}
-
-.site-header > .pill {
-  justify-self: end;
 }
 
 .pill {
@@ -479,16 +464,9 @@ section[id],
   container-type: inline-size;
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 5px;
-}
-
 /* Sized by the column, not the window: 4 tiles need about 130px each to fit their longest word. */
 @container (max-width: 520px) {
-  .values,
-  .stats {
+  .values {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -496,31 +474,6 @@ section[id],
     padding-left: 0;
     border-left: 0;
   }
-}
-
-.stats article {
-  min-height: 78px;
-  display: grid;
-  place-items: center;
-  align-content: center;
-  padding: 10px;
-  border: 1px solid var(--line);
-  background: var(--paper-soft);
-  text-align: center;
-}
-
-.stats strong {
-  font-family: var(--display);
-  font-size: 30px;
-  font-weight: 400;
-  line-height: 1;
-}
-
-.stats span {
-  margin-top: 5px;
-  color: #666d68;
-  font-size: 12px;
-  line-height: 1.2;
 }
 
 .services {
@@ -565,112 +518,109 @@ section[id],
   margin: 0 auto;
 }
 
+/* Work cards: the face shows a label and a title; hover, focus or tap swaps the
+   painting for a flat panel and reveals the description. */
 .service-card {
   position: relative;
   min-height: clamp(390px, 42vw, 520px);
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   overflow: hidden;
   padding: clamp(28px, 3vw, 40px);
   border-radius: 2px;
-  background: color-mix(in srgb, var(--paper) 72%, var(--seafoam));
+  color: var(--paper);
+  background: #3f7578;
   isolation: isolate;
+  cursor: default;
+  transition:
+    background-color 420ms ease,
+    color 420ms ease;
 }
 
-.service-card:nth-child(3) {
-  background: var(--paper-soft);
+.service-card > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-.service-card:nth-child(2)::after,
-.service-card:nth-child(3)::after {
-  content: "";
+.service-card img,
+.service-card::before,
+.service-card::after {
   position: absolute;
   inset: 0;
+  transition: opacity 420ms ease;
+}
+
+.service-card img {
+  z-index: -3;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* The paintings keep their subject on the right; a centred crop would cut it off. */
+  object-position: 82% center;
+}
+
+/* Keeps the label and title readable on top of a painting. */
+.service-image-card::before {
+  content: "";
+  z-index: -2;
+  background: linear-gradient(180deg, rgba(9, 34, 38, 0.5), transparent 32%, transparent 52%, rgba(9, 34, 38, 0.72));
+}
+
+.service-card::after {
+  content: "";
   z-index: -1;
-  opacity: 0.25;
-  background-image: radial-gradient(rgba(43, 43, 41, 0.55) 0.7px, transparent 0.85px);
+  opacity: 0.22;
+  background-image: radial-gradient(currentColor 0.7px, transparent 0.85px);
   background-size: 9px 9px;
   mask-image: linear-gradient(90deg, transparent 24%, #000);
 }
 
-.service-card h3 {
-  margin-bottom: 16px;
-  font-size: clamp(25px, 2.3vw, 32px);
-  line-height: 1.05;
-}
-
-.service-card p {
-  max-width: 360px;
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.48;
-}
-
 .service-card .eyebrow {
-  margin-bottom: 14px;
+  margin-bottom: auto;
+  padding-bottom: 24px;
+  color: inherit;
   font-size: 12px;
 }
 
-.service-image-card .eyebrow {
-  color: inherit;
-  opacity: 0.82;
+.service-card h3 {
+  margin: 0;
+  font-size: clamp(27px, 2.6vw, 38px);
+  line-height: 1.05;
 }
 
-.service-image-card {
-  color: var(--paper);
-  background: var(--ink);
+.service-card p:not(.eyebrow) {
+  max-width: 400px;
+  max-height: 0;
+  margin: 0;
+  overflow: hidden;
+  opacity: 0;
+  font-size: 15px;
+  line-height: 1.48;
+  transition:
+    max-height 420ms var(--ease-out),
+    opacity 300ms ease,
+    margin-top 420ms var(--ease-out);
 }
 
-.service-image-card img {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 900ms var(--ease-out);
+.service-card:hover,
+.service-card:focus,
+.service-card:focus-within {
+  color: var(--ink);
+  background: var(--seafoam-deep);
 }
 
-.service-image-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(105deg, rgba(9, 34, 38, 0.82), rgba(9, 34, 38, 0.22) 66%, rgba(9, 34, 38, 0.1));
+.service-card:hover img,
+.service-card:focus img,
+.service-card:hover::before,
+.service-card:focus::before {
+  opacity: 0;
 }
 
-.service-image-card:hover img,
-.service-image-card:focus-within img {
-  transform: scale(1.04);
-}
-
-.starburst {
-  position: absolute;
-  top: 52%;
-  right: 22%;
-  width: 24px;
-  height: 24px;
-}
-
-.starburst::before,
-.starburst::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 1px;
-  height: 100%;
-  background: currentColor;
-}
-
-.starburst::after {
-  transform: rotate(90deg);
-}
-
-.starburst.center {
-  top: 50%;
-  right: 45%;
+.service-card:hover p:not(.eyebrow),
+.service-card:focus p:not(.eyebrow) {
+  max-height: 12em;
+  margin-top: 14px;
+  opacity: 1;
 }
 
 .process {
@@ -936,11 +886,27 @@ section[id],
   list-style: none;
 }
 
+.site-header > .pill {
+  justify-self: end;
+  min-height: 42px;
+}
+
+/* The header has no room for the pill on small screens, so the footer copy shows there instead. */
 .footer-resume {
+  display: none;
   margin-top: 22px;
 }
 
-.work-card span,
+@media (max-width: 820px) {
+  .site-header > .pill {
+    display: none;
+  }
+
+  .footer-resume {
+    display: inline-flex;
+  }
+}
+
 .skills li {
   display: inline-flex;
   width: fit-content;
@@ -956,7 +922,8 @@ section[id],
   position: relative;
   min-height: 760px;
   display: grid;
-  grid-template-rows: auto auto minmax(420px, 1fr);
+  grid-template-columns: 100%;
+  grid-template-rows: auto minmax(420px, 1fr);
   justify-items: center;
   overflow: hidden;
   padding-top: clamp(42px, 6vh, 64px);
@@ -964,15 +931,7 @@ section[id],
   text-align: center;
 }
 
-.footer .footer-ribbon {
-  position: absolute;
-  top: 0;
-  left: 36px;
-  z-index: 4;
-}
-
-.footer-center,
-.footer-links {
+.footer-center {
   position: relative;
   z-index: 3;
 }
@@ -1004,32 +963,35 @@ section[id],
 
 .footer-socials {
   display: flex;
-  gap: 22px;
+  gap: 12px;
   margin-top: 22px;
 }
 
 .footer-socials a {
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.footer-links {
-  width: min(900px, 74vw);
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 44px;
-  margin-top: 28px;
-  font-size: 14px;
-  font-weight: 600;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  transition: background-color 220ms ease, color 220ms ease;
 }
 
-.footer-links a {
-  position: relative;
-  justify-self: center;
+.footer-socials a:hover,
+.footer-socials a:focus-visible {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.footer-socials svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
 }
 
 .footer-people {
   align-self: end;
+  justify-self: center;
   width: 100vw;
   max-width: none;
   height: 100%;
@@ -1066,6 +1028,15 @@ section[id],
   transform: translateY(0);
 }
 
+/* .reveal's transition list would otherwise drop the card's colour fade. */
+.service-card.reveal {
+  transition:
+    opacity 800ms var(--ease-out),
+    transform 800ms var(--ease-out),
+    background-color 420ms ease,
+    color 420ms ease;
+}
+
 :focus-visible {
   outline: 2px solid var(--teal);
   outline-offset: 3px;
@@ -1081,8 +1052,7 @@ section[id],
     padding-left: 24px;
   }
 
-  .ribbon,
-  .footer .footer-ribbon {
+  .ribbon {
     left: 24px;
   }
 
@@ -1128,10 +1098,6 @@ section[id],
     font-size: 13px;
   }
 
-  .site-header > .pill {
-    display: none;
-  }
-
   .hero {
     align-items: flex-start;
     padding: 134px 24px 46px;
@@ -1139,7 +1105,7 @@ section[id],
 
   .hero::before {
     background:
-      linear-gradient(180deg, rgba(251, 250, 246, 1) 58%, transparent 66%);
+      linear-gradient(180deg, rgba(251, 250, 246, 1) 66%, transparent 73%);
   }
 
   .hero-copy {
@@ -1153,7 +1119,7 @@ section[id],
 
   /* Narrow screens: copy on top, the figure in the lower half. */
   .hero-art {
-    top: 58%;
+    top: 66%;
   }
 
   .hero-art video,
@@ -1258,12 +1224,6 @@ section[id],
     grid-template-rows: auto auto minmax(390px, 1fr);
   }
 
-  .footer-links {
-    width: calc(100vw - 48px);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 22px;
-  }
-
   .footer-people {
     min-height: 390px;
     object-position: center 28%;
@@ -1275,11 +1235,14 @@ section[id],
     display: none;
   }
 
+  /* ponytail: five links fit down to 360px wide; below that, swap to a menu button */
   .site-header nav {
-    gap: 14px;
+    gap: 8px;
+    font-size: 12px;
   }
 
   .site-header {
+    padding: 0 14px 0 76px;
     grid-template-columns: 1fr;
   }
 
@@ -1346,10 +1309,6 @@ section[id],
     padding-top: 72px;
   }
 
-  .footer .footer-ribbon {
-    left: 20px;
-  }
-
   .footer h2 {
     font-size: 48px;
   }
@@ -1365,6 +1324,366 @@ section[id],
     min-height: 370px;
     object-fit: cover;
     object-position: center 24%;
+  }
+}
+
+/* Below desktop the nav runs over the portrait, so the header always gets its backdrop. */
+@media (max-width: 1120px) {
+  .site-header {
+    border-bottom: 1px solid var(--line);
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
+    backdrop-filter: blur(14px);
+  }
+}
+
+/* Phones: a slimmer ribbon leaves room for all five links down to 320px. */
+@media (max-width: 560px) {
+  .ribbon {
+    left: 10px;
+    width: 38px;
+    font-size: 15px;
+  }
+
+  .site-header {
+    padding: 0 12px 0 58px;
+  }
+
+  .site-header nav {
+    justify-content: space-between;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 359px) {
+  .site-header nav {
+    font-size: 11px;
+  }
+
+  /* Both hero buttons on one row. */
+  .hero .pill {
+    min-height: 44px;
+    gap: 8px;
+    padding: 0 14px;
+  }
+}
+
+/* Tablets: portrait beside the text, cards two across. */
+@media (min-width: 561px) and (max-width: 820px) {
+  .about {
+    grid-template-columns: 38% minmax(0, 1fr);
+  }
+
+  .about > .section-label {
+    grid-column: 1 / -1;
+  }
+
+  .about-art {
+    min-height: 0;
+  }
+
+  .about-copy {
+    padding: 40px 28px 48px;
+  }
+
+  .service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .service-card {
+    min-height: 340px;
+  }
+
+  .process {
+    min-height: 0;
+  }
+
+  .process-grid {
+    min-height: 0;
+    grid-template-rows: auto;
+    padding-top: 150px;
+  }
+
+  .process-grid:has(.tile:hover),
+  .process-grid:has(.tile:focus-visible) {
+    grid-template-rows: auto;
+  }
+}
+
+/* Tablets and phones: the ribbon ends at the header so nothing hangs over the page,
+   which lets section names line up with the content instead of dodging it. */
+@media (max-width: 820px) {
+  .ribbon {
+    height: 86px;
+    padding-top: 34px;
+  }
+
+  .section-label,
+  .selected .section-label {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 20px 24px;
+  }
+
+  .section-label span,
+  .section-label strong {
+    margin: 0;
+  }
+}
+
+/* Tablets and phones: the copy takes the height it needs and the figure fills whatever is left,
+   so the two can never overlap or leave a gap. */
+@media (max-width: 820px) {
+  /* The background drifts from page paper to the painting's own cream, so the figure
+     has no visible edge where it starts. */
+  .hero {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 112px 24px 0;
+    background: linear-gradient(180deg, var(--paper) 22%, #f3ecdc 62%);
+  }
+
+  .hero::before,
+  .hero-dots {
+    display: none;
+  }
+
+  .hero-copy {
+    flex: none;
+  }
+
+  .hero h1 {
+    max-width: none;
+    font-size: clamp(36px, 10vw, 60px);
+    text-wrap: wrap;
+  }
+
+  .hero-copy > p {
+    max-width: 34em;
+    margin: 18px 0 20px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .hero-art {
+    position: relative;
+    inset: auto;
+    flex: 1 1 0;
+    min-height: 170px;
+    margin: 8px -24px 0;
+    mask-image: linear-gradient(180deg, transparent, #000 96px);
+  }
+
+  .hero-art video,
+  .hero-art canvas {
+    object-position: 78% top;
+  }
+}
+
+/* Short screens: tighter copy leaves more height for the figure. */
+@media (max-width: 820px) and (max-height: 740px) {
+  .hero {
+    padding-top: 98px;
+  }
+
+  .hero h1 {
+    font-size: clamp(32px, 9vw, 44px);
+  }
+
+  .hero-copy > p {
+    margin: 14px 0 16px;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+}
+
+/* Phones: shorter pictures and a 2x2 grid of values. */
+@media (max-width: 560px) {
+  .about-art {
+    min-height: 0;
+    height: min(88vw, 380px);
+  }
+
+  .about-art img {
+    object-position: center 14%;
+  }
+
+  .values {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 14px;
+  }
+
+  .values article:nth-child(n) {
+    padding: 0;
+    border: 0;
+  }
+
+  .values article:nth-child(even) {
+    padding-left: 14px;
+    border-left: 1px solid var(--line);
+  }
+
+  .service-card {
+    min-height: 300px;
+  }
+
+  .work-card img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .process {
+    min-height: 0;
+  }
+
+  .process-grid {
+    min-height: 0;
+    padding-top: 150px;
+  }
+}
+
+/* Experience on tablets and phones: a small version of the desktop grid. The tiles zig-zag
+   over the painting, one is open at a time, and hovering, focusing or tapping another
+   one reshapes the grid around it. With nothing chosen, the first tile is open. */
+@media (max-width: 820px) {
+  .process-grid {
+    height: 660px;
+    min-height: 0;
+    gap: 0;
+    padding: 0;
+    grid-template-columns: 1.25fr 1.25fr 0.7fr;
+    grid-template-rows: 2.2fr 1fr 1fr 1fr;
+  }
+
+  .grid-cell {
+    display: block;
+  }
+
+  .grid-cell:nth-child(3n + 1) { grid-column: 1; }
+  .grid-cell:nth-child(3n + 2) { grid-column: 2; }
+  .grid-cell:nth-child(3n) { grid-column: 3; }
+  .grid-cell:nth-child(-n + 3) { grid-row: 1; }
+  .grid-cell:nth-child(n + 4):nth-child(-n + 6) { grid-row: 2; }
+  .grid-cell:nth-child(n + 7):nth-child(-n + 9) { grid-row: 3; }
+  .grid-cell:nth-child(n + 10):nth-child(-n + 12) { grid-row: 4; }
+  .grid-cell:nth-child(n + 13) { display: none; }
+
+  .tile {
+    overflow: hidden;
+    padding: 16px 18px;
+    cursor: pointer;
+  }
+
+  .tile-a { grid-column: 1 / 3; grid-row: 1; }
+  .tile-b { grid-column: 2 / 4; grid-row: 2; }
+  .tile-c { grid-column: 1 / 3; grid-row: 3; }
+  .tile-d { grid-column: 2 / 4; grid-row: 4; }
+
+  .tile h2 {
+    font-size: 18px;
+  }
+
+  .tile p:not(.meta) {
+    opacity: 0;
+    transition: opacity 320ms ease;
+  }
+
+  .tile:hover p:not(.meta),
+  .tile:focus p:not(.meta),
+  .process-grid:not(:has(.tile:hover, .tile:focus)) .tile-a p:not(.meta) {
+    opacity: 1;
+  }
+
+  .process-grid:has(.tile-a:hover),
+  .process-grid:has(.tile-a:focus) {
+    grid-template-columns: 1.25fr 1.25fr 0.7fr;
+    grid-template-rows: 2.2fr 1fr 1fr 1fr;
+  }
+
+  .process-grid:has(.tile-b:hover),
+  .process-grid:has(.tile-b:focus) {
+    grid-template-columns: 0.7fr 1.25fr 1.25fr;
+    grid-template-rows: 1fr 2.2fr 1fr 1fr;
+  }
+
+  .process-grid:has(.tile-c:hover),
+  .process-grid:has(.tile-c:focus) {
+    grid-template-columns: 1.25fr 1.25fr 0.7fr;
+    grid-template-rows: 1fr 1fr 2.2fr 1fr;
+  }
+
+  .process-grid:has(.tile-d:hover),
+  .process-grid:has(.tile-d:focus) {
+    grid-template-columns: 0.7fr 1.25fr 1.25fr;
+    grid-template-rows: 1fr 1fr 1fr 2.2fr;
+  }
+}
+
+@media (min-width: 561px) and (max-width: 820px) {
+  .process-grid {
+    height: 560px;
+  }
+}
+
+/* Small screens that are wide for their height (a phone held sideways, a squarish window):
+   stacking would squeeze the figure into a thin strip, so the copy sits left of it as on desktop. */
+@media (max-width: 950px) and (max-height: 500px), (max-width: 820px) and (min-aspect-ratio: 4 / 5) {
+  .hero {
+    flex-direction: row;
+    align-items: center;
+    /* left padding clears the ribbon */
+    padding: 84px 24px 20px 84px;
+    background: none;
+  }
+
+  .hero::before {
+    display: block;
+    background: linear-gradient(90deg, rgba(251, 250, 246, 0.98) 0%, rgba(251, 250, 246, 0.9) 40%, rgba(251, 250, 246, 0.3) 62%, transparent 80%);
+  }
+
+  .hero-copy {
+    width: 52%;
+  }
+
+  .hero h1 {
+    font-size: clamp(28px, 5.4vw, 44px);
+  }
+
+  .hero-copy > p {
+    max-width: none;
+    margin: 12px 0 16px;
+    font-size: 15px;
+    line-height: 1.42;
+  }
+
+  /* Starts below the header and sits a little further right, so the face clears both the nav and the copy. */
+  .hero-art {
+    position: absolute;
+    inset: 72px 0 0;
+    margin: 0;
+    mask-image: none;
+  }
+
+  .hero-art video,
+  .hero-art canvas {
+    object-position: right center;
+    transform: translateX(12%);
+  }
+}
+
+/* The sideways phone is also very short. */
+@media (max-width: 950px) and (max-height: 500px) {
+  .hero {
+    padding: 72px 24px 12px 84px;
+  }
+
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 38px);
+  }
+
+  .hero-copy > p {
+    margin: 10px 0 14px;
+    font-size: 14px;
+    line-height: 1.4;
   }
 }
 

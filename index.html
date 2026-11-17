@@ -21,7 +21,7 @@
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
-    <div class="ribbon" aria-hidden="true"><span></span></div>
+    <a class="ribbon" href="#" aria-label="Back to top">YH</a>
 
     <header class="site-header">
       <a class="wordmark" href="#">Yuqing Huang</a>
@@ -29,9 +29,10 @@
         <a href="#about">About</a>
         <a href="#work">Work</a>
         <a href="#experience">Experience</a>
+        <a href="#education">Education</a>
         <a href="#contact">Contact</a>
       </nav>
-      <a class="pill pill-light" href="mailto:yuqing.h99@icloud.com">Let's talk <span aria-hidden="true">→</span></a>
+      <a class="pill pill-dark" href="./assets/Yuqing_Huang_Resume.pdf" target="_blank" rel="noopener">Resume <span aria-hidden="true">→</span></a>
     </header>
 
     <main>
@@ -42,8 +43,9 @@
             Where art<br />meets <em>intelligence.</em>
           </h1>
           <p>
-            I'm an AI solutions engineer and full-stack developer in Zurich,
-            building intelligent systems that people can understand and trust.
+            I turn messy enterprise workflows into AI systems people actually
+            use. The aim is never to replace their judgment, but to give it
+            better tools: scoped together, explainable by design.
           </p>
           <div class="button-row">
             <a class="pill pill-dark" href="#work">View my work <span aria-hidden="true">→</span></a>
@@ -80,12 +82,13 @@
             I make AI systems more human, explainable, and useful.
           </h2>
           <p>
-            I'm Yuqing — an AI solutions engineer at Arcas Agentic and a
-            software engineer at bloem, based in Zurich. My master's at the
-            University of Zurich focused on Data Humanism and Explainable AI.
-            I build GenAI workflows, recommender systems, and production web
-            apps that make intelligent systems more useful, transparent, and
-            human-centered.
+            I started in mechanical engineering, where a design only counts
+            if it works in the real world. I've kept that standard in AI.
+            Today I build enterprise AI at Arcas Agentic, taking pilots in
+            legal, finance, and deal advisory from first client conversation
+            to something a team runs on their own. Outside work I've taught
+            dance for eight years, which is where I learned to explain hard
+            things simply.
           </p>
           <div class="values">
             <article>
@@ -122,22 +125,26 @@
             <article>
               <span class="value-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24">
-                  <path d="M15 4 20 9 9 20H4v-5L15 4Z" />
-                  <path d="m13 6 5 5" />
-                  <path d="M4 20c4-1 6-3 7-7" />
+                  <path d="M3 12a2 2 0 1 0 4 0 2 2 0 1 0-4 0Z" />
+                  <path d="M7 12h13" />
+                  <path d="m16 8 4 4-4 4" />
                 </svg>
               </span>
-              <h3>Creative</h3>
-              <p>Bringing a dancer's eye for rhythm and detail.</p>
+              <h3>End-to-end</h3>
+              <p>From the first scoping call to the shipped release.</p>
             </article>
           </div>
-          <div class="stats">
-            <article><strong>80%</strong><span>Manual review time reduced</span></article>
-            <article><strong>19</strong><span>Production releases shipped</span></article>
-            <article><strong>1M+</strong><span>Songs processed for recommendations</span></article>
-            <article><strong>3</strong><span>AI workflows delivered</span></article>
-          </div>
           <ul class="skills" aria-label="Skills">
+            <li>LangChain</li>
+            <li>LangGraph</li>
+            <li>RAG</li>
+            <li>MCP</li>
+            <li>Multi-agent systems</li>
+            <li>Document intelligence</li>
+            <li>LLM evaluation</li>
+            <li>PII masking</li>
+            <li>Microsoft Foundry</li>
+            <li>Azure</li>
             <li>Python</li>
             <li>TypeScript</li>
             <li>React</li>
@@ -146,10 +153,6 @@
             <li>FastAPI</li>
             <li>PostgreSQL</li>
             <li>Supabase</li>
-            <li>LangChain</li>
-            <li>RAG</li>
-            <li>MCP</li>
-            <li>Azure</li>
             <li>Docker</li>
           </ul>
         </div>
@@ -169,7 +172,7 @@
             </p>
           </div>
           <div class="service-grid">
-          <article class="service-card service-image-card reveal">
+          <article class="service-card service-image-card reveal" tabindex="0">
             <img src="./assets/service-projects-upload.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="" />
             <div>
               <p class="eyebrow">Arcas Agentic · Dec 2025 to now</p>
@@ -177,23 +180,23 @@
               <p>End-to-end AI pilots across legal, finance, and deal advisory: document intelligence pipelines, RAG-based agents, and LLM extraction for contracts, IMs, and valuation materials.</p>
             </div>
           </article>
-          <article class="service-card reveal">
+          <article class="service-card service-image-card reveal" tabindex="0">
+            <img src="./assets/service-dance.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="" />
             <div>
               <p class="eyebrow">Full-stack developer, solo · Sep to Dec 2025</p>
               <h3>Dance studio member management system</h3>
               <p>A web app replacing manual studio admin: QR code check-in with real-time capacity tracking, automated subscription deductions, and a self-service member portal. 19 releases shipped on Vercel with Next.js and Supabase.</p>
             </div>
-            <span class="starburst" aria-hidden="true"></span>
           </article>
-          <article class="service-card reveal">
+          <article class="service-card service-image-card reveal" tabindex="0">
+            <img src="./assets/service-music.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="" />
             <div>
               <p class="eyebrow">Frontend developer, team of five · Apr 2024 to Jan 2025</p>
               <h3>Group music recommendation platform</h3>
               <p>A collaborative music player with Spotify integration, group song voting, and explainable real-time recommendations. Processed 1M+ song audio features, trained a LightFM model, and built the Vue interface from Figma designs.</p>
             </div>
-            <span class="starburst center" aria-hidden="true"></span>
           </article>
-          <article class="service-card service-image-card reveal">
+          <article class="service-card service-image-card reveal" tabindex="0">
             <img src="./assets/service-consulting-upload.webp" width="1448" height="1086" loading="lazy" decoding="async" alt="" />
             <div>
               <p class="eyebrow">Master thesis · University of Zurich · 2025</p>
@@ -256,7 +259,6 @@
 
       <section class="selected education page-section page-section--tall split-section" id="education" aria-labelledby="work-title">
         <aside class="section-label">
-          <span>04</span>
           <strong id="work-title">Education</strong>
           <ol class="timeline">
             <li><b>2022 – 2025</b>University of Zurich</li>
@@ -267,21 +269,19 @@
         </aside>
         <div class="work-grid">
           <article class="work-card reveal" tabindex="0">
-            <img src="./assets/education-master.webp" width="1254" height="1254" loading="lazy" decoding="async" alt="Yuqing working on a laptop in a library" />
+            <img src="./assets/education-master.webp" width="1254" height="1254" loading="lazy" decoding="async" alt="Yuqing beside a brass astrolabe, books and a balance scale" />
             <div>
               <h2>MSc in Computer Science</h2>
               <p class="meta">University of Zurich · 2022 – 2025</p>
               <p>Major in Data Science with a minor in Banking and Finance, plus additional Bachelor Informatik coursework.</p>
-              <span>Data Science</span><span>Finance</span><span>AI</span>
             </div>
           </article>
           <article class="work-card reveal" tabindex="0">
-            <img src="./assets/education-bachelor.webp" width="1254" height="1254" loading="lazy" decoding="async" alt="Yuqing studying mechanical gears and instruments" />
+            <img src="./assets/education-bachelor.webp" width="1254" height="1254" loading="lazy" decoding="async" alt="Yuqing adjusting a brass clockwork mechanism with dividers" />
             <div>
               <h2>BEng in Mechanical Engineering</h2>
               <p class="meta">Shanghai University · 2017 – 2021</p>
               <p>Built an engineering foundation through mechanical systems, structural design, and control of inertial actuators.</p>
-              <span>Engineering</span><span>Control</span><span>Design</span>
             </div>
           </article>
         </div>
@@ -290,23 +290,16 @@
     </main>
 
     <footer class="footer" id="contact">
-      <div class="footer-ribbon"><span></span></div>
       <div class="footer-center">
         <h2><span>Yuqing</span> Huang</h2>
         <p>AI engineer & full-stack developer<br />working across Data Humanism and Explainable AI</p>
         <div class="footer-socials" aria-label="Social links">
-          <a href="https://www.linkedin.com/in/yuqing-huang-8309a61a2" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
-          <a href="https://github.com/DarleneQing" target="_blank" rel="noopener" aria-label="GitHub">GH</a>
-          <a href="mailto:yuqing.h99@icloud.com" aria-label="Email">@</a>
+          <a href="https://www.linkedin.com/in/yuqing-huang-8309a61a2" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+          <a href="https://github.com/DarleneQing" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg></a>
+          <a href="mailto:yuqing.h99@icloud.com" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6.5A2.5 2.5 0 0 1 4.5 4h15A2.5 2.5 0 0 1 22 6.500v.3l-10 6.2L2 6.800zM2 9.200v8.300A2.5 2.5 0 0 0 4.5 20h15a2.5 2.5 0 0 0 2.5-2.5V9.200l-10 6.100z"/></svg></a>
         </div>
         <a class="pill pill-light footer-resume" href="./assets/Yuqing_Huang_Resume.pdf" target="_blank" rel="noopener">Resume <span aria-hidden="true">→</span></a>
       </div>
-      <nav class="footer-links" aria-label="Footer navigation">
-        <a href="#about">About</a>
-        <a href="#work">Work</a>
-        <a href="#experience">Experience</a>
-        <a href="#education">Education</a>
-      </nav>
       <img class="footer-people" src="./assets/footer-community.webp" width="1600" height="800" loading="lazy" decoding="async" alt="A diverse group of people working on laptops" />
     </footer>
 
