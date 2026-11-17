@@ -483,29 +483,10 @@ section[id],
 
 /* About entrance. The portrait is unveiled like a cloth drawn off a painting; the text builds in reading order; the value icons draw themselves.
    Delays come from --d, set per element in script.js. */
-/* The clip sits on the image, not on the observed box: a fully clipped box never
-   counts as on screen, so it would never be revealed. */
+/* The portrait is simply there: no entrance. */
 .about-art.reveal {
   opacity: 1;
   transform: none;
-}
-
-/* Unveiled from the top down: the top of the picture is what is on screen when it starts. */
-.about-art.reveal img {
-  clip-path: inset(0 0 100% 0);
-  transform: scale(1.14);
-  transition:
-    clip-path 1400ms var(--ease-out),
-    transform 1800ms var(--ease-out);
-}
-
-.about-art.reveal.is-visible img {
-  clip-path: inset(0);
-  transform: scale(1);
-}
-
-.about:hover .about-art.is-visible img {
-  transform: scale(1.018);
 }
 
 .about-copy.reveal {
@@ -872,6 +853,39 @@ section[id],
   background: var(--paper);
 }
 
+/* The timeline draws itself: the line grows downward and each entry follows it in. */
+.timeline.reveal {
+  opacity: 1;
+  transform: none;
+}
+
+.timeline.reveal::before {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1400ms var(--ease-out);
+}
+
+.timeline.reveal.is-visible::before {
+  transform: scaleY(1);
+}
+
+.timeline.reveal li {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 600ms ease,
+    transform 600ms var(--ease-out);
+}
+
+.timeline.reveal.is-visible li {
+  opacity: 1;
+  transform: none;
+}
+
+.timeline.reveal li:nth-child(2) { transition-delay: 280ms; }
+.timeline.reveal li:nth-child(3) { transition-delay: 560ms; }
+.timeline.reveal li:nth-child(4) { transition-delay: 840ms; }
+
 .timeline b {
   display: block;
   margin-bottom: 4px;
@@ -1004,20 +1018,8 @@ section[id],
   min-height: 42px;
 }
 
-/* The header has no room for the pill on small screens, so the footer copy shows there instead. */
-.footer-resume {
+.menu-toggle {
   display: none;
-  margin-top: 22px;
-}
-
-@media (max-width: 820px) {
-  .site-header > .pill {
-    display: none;
-  }
-
-  .footer-resume {
-    display: inline-flex;
-  }
 }
 
 .skills li {
@@ -1568,6 +1570,11 @@ section[id],
     flex: none;
   }
 
+  /* The header already links to Work and About, so the buttons give their room to the figure. */
+  .hero .button-row {
+    display: none;
+  }
+
   .hero h1 {
     max-width: none;
     font-size: clamp(36px, 10vw, 60px);
@@ -1800,6 +1807,115 @@ section[id],
     margin: 10px 0 14px;
     font-size: 14px;
     line-height: 1.4;
+  }
+}
+
+/* Tablets and phones: the links fold into a menu button at the top right, and the
+   Resume button stays in the header beside it. */
+@media (max-width: 820px) {
+  .site-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px 0 84px;
+  }
+
+  .site-header > .pill {
+    display: inline-flex;
+    min-height: 40px;
+    margin-left: auto;
+    padding: 0 16px;
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .menu-toggle {
+    position: relative;
+    display: block;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .menu-toggle span,
+  .menu-toggle span::before {
+    position: absolute;
+    left: 13px;
+    width: 16px;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 260ms var(--ease-out);
+  }
+
+  .menu-toggle span {
+    top: 17px;
+  }
+
+  .menu-toggle span::before {
+    content: "";
+    top: 7px;
+    left: 0;
+  }
+
+  .site-header.is-open .menu-toggle span {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+
+  .site-header.is-open .menu-toggle span::before {
+    transform: translateY(-7px) rotate(-90deg);
+  }
+
+  .site-header nav {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    display: grid;
+    gap: 0;
+    justify-content: stretch;
+    padding: 4px 24px 14px;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+    font-size: 16px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition:
+      opacity 220ms ease,
+      transform 260ms var(--ease-out),
+      visibility 0s linear 260ms;
+  }
+
+  .site-header.is-open nav {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition-delay: 0s;
+  }
+
+  .site-header nav a {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .site-header nav a:last-child {
+    border-bottom: 0;
+  }
+
+  .site-header nav a::after {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .site-header {
+    padding: 0 12px 0 58px;
   }
 }
 

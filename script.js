@@ -11,6 +11,22 @@ const updateHeader = () => {
 updateHeader();
 window.addEventListener("scroll", updateHeader, { passive: true });
 
+// Small screens: the nav is a panel opened by the menu button.
+const menuToggle = document.querySelector(".menu-toggle");
+const setMenu = (open) => {
+  siteHeader.classList.toggle("is-open", open);
+  menuToggle.setAttribute("aria-expanded", String(open));
+};
+if (siteHeader && menuToggle) {
+  menuToggle.addEventListener("click", () => setMenu(!siteHeader.classList.contains("is-open")));
+  siteHeader.querySelector("nav").addEventListener("click", (event) => {
+    if (event.target.closest("a")) setMenu(false);
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") setMenu(false);
+  });
+}
+
 // About: split the heading into words and give each text piece its place in the build order.
 const aboutCopy = document.querySelector(".about-copy");
 if (aboutCopy && !prefersReducedMotion) {
@@ -52,21 +68,7 @@ if (prefersReducedMotion) {
     { rootMargin: "0px 0px -8% 0px", threshold: 0.12 }
   );
 
-  // The portrait waits until a third of it is on screen, so its unveiling happens in view.
-  const portrait = document.querySelector(".about-art");
-  const portraitObserver = new IntersectionObserver(
-    ([entry]) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add("is-visible");
-      portraitObserver.disconnect();
-    },
-    { threshold: 0.33 }
-  );
-
-  revealItems.forEach((item) => {
-    if (item === portrait) portraitObserver.observe(item);
-    else revealObserver.observe(item);
-  });
+  revealItems.forEach((item) => revealObserver.observe(item));
 }
 
 // Hero: the typing video loops at the top of the page. While the hero is pinned,
